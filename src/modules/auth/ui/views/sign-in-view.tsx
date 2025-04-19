@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -29,17 +29,19 @@ const poppins = Poppins({
 
 export const SignInView = () => {
 
-    const router = useRouter();
-
-    const trpc=useTRPC();
-    const login=useMutation(trpc.auth.login.mutationOptions({
-        onError: (error) =>{
-            toast.error(error.message)
-        },
-        onSuccess:()=>{
-            router.push("/")
-        }
-    }))
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const login = useMutation(trpc.auth.login.mutationOptions({
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(trpc.auth.session.queryFilter())
+      router.push("/");
+    },
+  }));
+        
   const form = useForm<z.infer<typeof loginSchema>>({
     mode: "all",
     resolver: zodResolver(loginSchema),
