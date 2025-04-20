@@ -138,9 +138,34 @@ const categories = [
 ];
 
 const seed = async () => {
-  const playload = await getPayload({ config });
+  const payload = await getPayload({ config });
+
+  const adminTenant = await payload.create({
+    collection: "tenants",
+    data: {
+      name: "admin",
+      slug: "admin",
+      stripeAccountId: "admin",
+    },
+  });
+
+  await payload.create({
+    collection: "users",
+    data: {
+      email: "admin@demo.com",
+      password: "demo",
+      roles: ["super-admin"],
+      username: "admin",
+      tenants: [
+        {
+          tenant: adminTenant.id,
+        }
+      ]
+    },
+  });
+
   for (const category of categories) {
-    const parentCategory = await playload.create({
+    const parentCategory = await payload.create({
       collection: "categories",
       data: {
         name: category.name,
@@ -150,7 +175,7 @@ const seed = async () => {
       },
     });
     for (const subCategory of category.subcategories || []){
-        await playload.create({
+        await payload.create({
             collection: "categories",
             data:{
                 name:subCategory.name,
