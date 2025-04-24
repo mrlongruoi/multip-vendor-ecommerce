@@ -35,13 +35,15 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
       setStates({success: false, cancel: false});
     },
     onSuccess:(data)=> {
-      window.location.href = data.url;
+      if (data.url) {
+        window.location.href = data.url;
+      }
     },
-    onError: ()=> {
-      if (error.data?.code === "UNAUTHORIZED"){        
+    onError: (err)=> {
+      if (err.data?.code === "UNAUTHORIZED"){        
         router.push("/sign-in")
       }
-      toast.error(error.message)
+      toast.error(err.message)
     },
   }));
 
