@@ -49,6 +49,8 @@ export const Tenants: CollectionConfig = {
           description: "Stripe Account ID associated with your shop",
        }
     },
+
+    
     {
         name: "stripeDetailsSubmitted",
         type: "checkbox",
