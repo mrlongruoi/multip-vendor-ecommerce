@@ -9,6 +9,9 @@ export const Categories: CollectionConfig = {
         update: ({req}) => isSuperAdmin(req.user),
         delete: ({req}) => isSuperAdmin(req.user),
   },
+
+
+  
   admin: {
     useAsTitle: "name",
     hidden: ({user})=>!isSuperAdmin(user),
