@@ -14,6 +14,7 @@ export const Products: CollectionConfig = {
   },
   admin: {
     useAsTitle: "name",
+    description: "You must submit your account brefore creating products",
   },
   fields: [
     {
