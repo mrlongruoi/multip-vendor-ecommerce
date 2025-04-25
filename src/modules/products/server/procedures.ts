@@ -19,6 +19,9 @@ export const productsRouter = createTRPCRouter({
         collection: "products",
         id: input.id,
         depth: 2,
+        select: {
+          context: false,
+        }
       });
 
       let isPurchased = false;
@@ -198,6 +201,9 @@ export const productsRouter = createTRPCRouter({
         sort,
         page: input.cursor,
         limit: input.limit,
+        select: {
+          context: false,// sai hay dung o day
+        }
       });
 
       const dataWithSummarizedReviews = await Promise.all(
